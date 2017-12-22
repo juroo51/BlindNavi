@@ -7,6 +7,7 @@
 
 int main()
 {
+	void tesst();
 
 	bool RealTimeMode{ false };
 	bool StoreToFileMode{ false };
