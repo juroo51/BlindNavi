@@ -1,14 +1,17 @@
 #pragma once
 #include <vector>
+#include <wrl\client.h>
+#include <opencv2\opencv.hpp>
+#include <opencv2\highgui.hpp>
 
-#include"opencv2\opencv.hpp"
+#include "Sectors.h"
 
 class Checker
 {
 public:
+	void average(const cv::Mat& depthBuffer, std::vector<Sectors>& sectors, int heightOfFrame, int widthOfFrame)
+	{
 
-	void average(cv::Mat depthMat)
-	 {
 		int count{ 0 }, chck{ 0 };
 		long int sum{ 0 };
 		double avg;
@@ -21,14 +24,14 @@ public:
 				count = 0;
 
 				//check one sector
-				for (int a = 0 + ((424 / 4)*r); a < ((424 / 4)*(r + 1)); a++)
+				for (int a = 0 + ((heightOfFrame / 4)*r); a < ((heightOfFrame/ 4)*(r + 1)); a++)
 				{
-					for (int b = (512 / 8)*s; b < (512 / 8)*(s + 1); b++)
+					for (int b = (widthOfFrame/ 8)*s; b < (widthOfFrame / 8)*(s + 1); b++)
 					{
 						//0 values cancellation
-						if (depthMat.at <unsigned short>(a, b) != 0)
+						if (depthBuffer.at <unsigned short>(a, b) != 0)
 						{
-							sum += depthMat.at <unsigned short>(a, b);
+							sum += depthBuffer.at <unsigned short>(a, b);
 							count++;
 						}
 					}
@@ -42,11 +45,30 @@ public:
 					//average value of sector in interval 500-3500
 					if (avg <= 3500.0 && avg >= 500.0)
 					{
-						//do magic
+						avg = (((avg - 500) / 3000) * 255);
+						sectors.push_back({ (widthOfFrame / 8)*s, (heightOfFrame / 4)*r, (widthOfFrame / 8)*(s + 1), (heightOfFrame / 4)*(r + 1), avg });
 					}
 				}
 				else
 					chck++;
 			}
+		/////new
+		////check whole vector
+		//for (unsigned int row{ 0 }; row < 4; row++)
+		//{
+		//	for (unsigned int column{ 0 }; column < 8; column++)
+		//	{
+		//		//check one sector
+		//		for (unsigned int i{ widthOfFrame / 8 + widthOfFrame * column }; i < (widthOfFrame / 8) * 2 + widthOfFrame * column; i++)
+		//		{
+		//			for (unsigned  int j{ heightOfFrame / 4 + heightOfFrame * row }; j < (heightOfFrame / 4) * 2 + heightOfFrame * row; j++)
+		//			{
+		//				//unsigned int from, to;
+
+		//			}
+		//		}
+		//	}
+		//}
+
 	}
 };

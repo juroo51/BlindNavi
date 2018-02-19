@@ -1,34 +1,50 @@
+#define _ATL_APARTMENT_THREADED
+
 #include "stdafx.h"
 #include "RealTime.h"
 #include "KinectInit.h"
-#include <iostream>
-
-#include <vector>
+#include "StoreToFile.h"
+#include "PlayFromFile.h"
+#include "TestFromFile.h"
 
 int main()
 {
-	void tesst();
+	bool realTimeMode		{ true	};
+	bool storeToFileMode	{ false	};
+	bool compressMode		{ false	};
+	bool playFromFileMode	{ false	};
+	bool testFromFileMode	{ false	};
+	std::string fileToRead	{ "06.02.2018_12-12-45.jdf" };
+	std::string configToRead{ "config.txt" };
 
-	bool RealTimeMode{ false };
-	bool StoreToFileMode{ false };
-	bool TestFromFileMode{ false };
-
-	if (RealTimeMode)
+	if (realTimeMode)
 	{
 		RealTime realtimemode;
 		realtimemode.run();
+		return 0;
 	}
 
-	if (StoreToFileMode)
+	if (storeToFileMode)
 	{
-
+		StoreToFile storetofilemode;
+		storetofilemode.run(compressMode);
+		return 0;
 	}
 
-	if (TestFromFileMode)
+	if (playFromFileMode)
 	{
-
+		PlayFromFile playfromfilemode;
+		playfromfilemode.run(fileToRead);
+		return 0;
 	}
 
-    return 0;
+	if (testFromFileMode)
+	{
+		TestFromFile testfromfilemode;
+		testfromfilemode.run(fileToRead, configToRead);
+		system("pause");
+		return 0;
+	}
+
+	return 0;
 }
-

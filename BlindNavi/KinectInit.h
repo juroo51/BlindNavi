@@ -13,7 +13,7 @@ private:
 	ComPtr<IKinectSensor> kinect;
 	ComPtr<IDepthFrameReader> depthFrameReader;
 	int widthOfDepth, heightOfDepth;
-	std::vector<UINT16> depthBuffer;
+	TIMESPAN relativeTime;
 
 public:
 	Kinect()
@@ -29,7 +29,6 @@ public:
 		depthFrameSource->get_FrameDescription(&depthDescription);
 		depthDescription->get_Width(&widthOfDepth);
 		depthDescription->get_Height(&heightOfDepth);
-		depthBuffer.resize(heightOfDepth*widthOfDepth);
 		Sleep(2000);
 	}
 
@@ -51,6 +50,11 @@ public:
 		return heightOfDepth;
 	}
 
+	TIMESPAN getTime() 
+	{
+		return relativeTime;
+	}
+
 	void getFrame(std::vector<UINT16>& depthFrame)
 	{
 		ComPtr<IDepthFrame> tmpFrame;
@@ -60,6 +64,8 @@ public:
 		{
 			return;
 		}
+
 		tmpFrame->CopyFrameDataToArray(static_cast<UINT>(depthFrame.size()), &depthFrame[0]);
+		tmpFrame->get_RelativeTime(&relativeTime);
 	}
 };

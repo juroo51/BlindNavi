@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 
 #include "opencv2\opencv.hpp"
@@ -8,16 +9,12 @@
 class RealTime
 {
 private:
-	cv::Mat depthMapRaw;
-	cv::Mat depthMapConversed;
-
+	cv::Mat depthMapRaw, depthMapConversed;;
 	std::vector<UINT16> depthBuffer;
-
 	Kinect m_kinect;
-//	Checker m_checker;
-
-	unsigned int HeightOfFrame;
-	unsigned int WidthOfFrame;
+	Checker m_checker;
+	unsigned int heightOfFrame, widthOfFrame;
+	TIMESPAN currentTimeSpan, lastTimeSpan{ 0 };
 
 public:
 	RealTime();
@@ -25,9 +22,8 @@ public:
 	void run();
 
 private:
-	void UpdateDepth();
 	void DrawDepth();
 	void CheckFrame();
-	//void RctlToDepth();
-	//void ShowDepth();
+	void RctlToDepth(std::vector <Sectors>);
+	void ShowDepth();
 };
